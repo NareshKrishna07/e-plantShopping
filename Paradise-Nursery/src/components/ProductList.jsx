@@ -1,6 +1,12 @@
 import { useState } from "react";
 
+import { useDispatch } from "react-redux";
+
+import { addItem } from "../redux/CartSlice";
+
 const ProductList = () => {
+
+  const dispatch = useDispatch();
 
   const [cartCount, setCartCount] = useState(0);
 
@@ -58,19 +64,27 @@ const ProductList = () => {
   ];
 
   const categories = [
+
     "Indoor Plants",
     "Succulents",
     "Air Purifying Plants"
   ];
 
-  const handleAddToCart = (plantId) => {
+  // Redux dispatch logic
+  const handleAddToCart = (plant) => {
 
-    setAddedItems([...addedItems, plantId]);
+    dispatch(addItem(plant));
+
+    setAddedItems([
+      ...addedItems,
+      plant.id
+    ]);
 
     setCartCount(cartCount + 1);
   };
 
   return (
+
     <div>
 
       <nav
@@ -89,21 +103,29 @@ const ProductList = () => {
 
           <a
             href="/"
-            style={{ color: "white", marginRight: "15px" }}
+            style={{
+              color: "white",
+              marginRight: "15px"
+            }}
           >
             Home
           </a>
 
           <a
             href="/plants"
-            style={{ color: "white", marginRight: "15px" }}
+            style={{
+              color: "white",
+              marginRight: "15px"
+            }}
           >
             Plants
           </a>
 
           <a
             href="/cart"
-            style={{ color: "white" }}
+            style={{
+              color: "white"
+            }}
           >
             Cart 🛒 ({cartCount})
           </a>
@@ -133,8 +155,10 @@ const ProductList = () => {
 
               {
                 plants
+
                   .filter(
-                    plant => plant.category === category
+                    (plant) =>
+                      plant.category === category
                   )
 
                   .map((plant) => (
@@ -162,7 +186,7 @@ const ProductList = () => {
                       <button
 
                         onClick={() =>
-                          handleAddToCart(plant.id)
+                          handleAddToCart(plant)
                         }
 
                         disabled={
